@@ -1,0 +1,135 @@
+.homePage {
+  width: 100%;
+}
+
+.hero {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  color: var(--color-text-white);
+  padding: var(--spacing-3xl) var(--spacing-lg);
+  text-align: center;
+}
+
+.heroContent {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.heroTitle {
+  font-family: var(--font-family-serif);
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing-lg);
+  color: var(--color-text-white);
+}
+
+.heroSubtitle {
+  font-size: var(--font-size-xl);
+  margin-bottom: var(--spacing-xl);
+  opacity: 0.95;
+  line-height: 1.6;
+}
+
+.heroActions {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.heroActions button {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.features {
+  padding: var(--spacing-3xl) var(--spacing-lg);
+  background-color: var(--color-background);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.sectionTitle {
+  text-align: center;
+  font-size: var(--font-size-3xl);
+  margin-bottom: var(--spacing-2xl);
+  color: var(--color-text-primary);
+}
+
+.featuresGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-xl);
+}
+
+.featureCard {
+  text-align: center;
+  height: 100%;
+}
+
+.featureIcon {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--spacing-md);
+  color: var(--color-primary);
+}
+
+.featureCard h3 {
+  font-family: var(--font-family-serif);
+  font-size: var(--font-size-xl);
+  margin-bottom: var(--spacing-md);
+  color: var(--color-text-primary);
+}
+
+.featureCard p {
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+.about {
+  padding: var(--spacing-3xl) var(--spacing-lg);
+  background-color: var(--color-background-white);
+}
+
+.aboutContent {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.aboutText {
+  text-align: center;
+}
+
+.aboutText h2 {
+  font-family: var(--font-family-serif);
+  font-size: var(--font-size-3xl);
+  margin-bottom: var(--spacing-lg);
+  color: var(--color-text-primary);
+}
+
+.aboutText p {
+  font-size: var(--font-size-lg);
+  line-height: 1.8;
+  margin-bottom: var(--spacing-md);
+  color: var(--color-text-secondary);
+}
+
+@media (max-width: 768px) {
+  .heroTitle {
+    font-size: var(--font-size-3xl);
+  }
+
+  .heroSubtitle {
+    font-size: var(--font-size-lg);
+  }
+
+  .featuresGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+
