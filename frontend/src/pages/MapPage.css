@@ -1,0 +1,121 @@
+.map-page {
+  padding: 2rem;
+  min-height: calc(100vh - 200px);
+}
+
+.map-page h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 2rem;
+  font-size: 2.5rem;
+}
+
+.map-page-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.map-section {
+  background: white;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.map-controls {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.map-controls h2 {
+  color: #667eea;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+
+.marker-form {
+  margin-bottom: 2rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 0.7rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.markers-list {
+  border-top: 1px solid #eee;
+  padding-top: 1.5rem;
+}
+
+.markers-list h3 {
+  color: #333;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.markers-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.markers-list li {
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 5px;
+  margin-bottom: 0.5rem;
+}
+
+.markers-list li strong {
+  color: #667eea;
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+.markers-list li p {
+  color: #666;
+  margin: 0.3rem 0;
+  font-size: 0.9rem;
+}
+
+.markers-list li small {
+  color: #999;
+  font-size: 0.8rem;
+}
+
+@media (max-width: 1024px) {
+  .map-page-content {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+

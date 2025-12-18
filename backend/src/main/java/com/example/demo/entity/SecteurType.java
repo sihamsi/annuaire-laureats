@@ -1,8 +1,8 @@
 package com.example.demo.entity;
 
 public enum SecteurType {
-    PUBLIC("public"), // Java constant: PUBLIC, Database value: "public"
-    PRIVE("prive"); // Java constant: PRIVE, Database value: "prive"
+    PUBLIC("public"), 
+    PRIVE("prive"); 
 
     private final String dbValue;
 
