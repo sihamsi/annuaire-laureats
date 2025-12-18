@@ -1,0 +1,87 @@
+{
+  "laureat1": {
+    "prenom": "Ahmed",
+    "nom": "BENALI",
+    "genre": "MASCULIN",
+    "telephone": "+212612345678",
+    "email": "ahmed.benali@example.com",
+    "promotion": "2020",
+    "filiere": "GENIE_CIVIL",
+    "secteur": "PUBLIC",
+    "organismeId": 1,
+    "latitude": 33.5731,
+    "longitude": -7.6298,
+    "description": "Ingénieur en génie civil spécialisé en structures"
+  },
+  "laureat2": {
+    "prenom": "Fatima",
+    "nom": "ALAOUI",
+    "genre": "FEMININ",
+    "telephone": "+212698765432",
+    "email": "fatima.alaoui@example.com",
+    "promotion": "2019",
+    "filiere": "GENIE_INFORMATIQUE",
+    "secteur": "PRIVE",
+    "autreOrganisme": "TechCorp Maroc",
+    "latitude": 33.5731,
+    "longitude": -7.6298,
+    "description": "Développeuse full-stack",
+    "imei": "987654321098765",
+    "deviceModel": "iPhone 13",
+    "osVersion": "iOS 15",
+    "appVersion": "1.0.0"
+  },
+  "laureat3": {
+    "prenom": "Mohamed",
+    "nom": "AMRANI",
+    "genre": "MASCULIN",
+    "email": "mohamed.amrani@example.com",
+    "promotion": "2021",
+    "filiere": "GENIE_INDUSTRIEL",
+    "secteur": "PUBLIC",
+    "latitude": 34.0209,
+    "longitude": -6.8416,
+    "description": "Ingénieur industriel"
+  },
+  "laureat4": {
+    "prenom": "Aicha",
+    "nom": "BENNANI",
+    "genre": "FEMININ",
+    "telephone": "+212611223344",
+    "email": "aicha.bennani@example.com",
+    "photoUrl": "https://example.com/photos/aicha.jpg",
+    "promotion": "2018",
+    "filiere": "GENIE_MECANIQUE",
+    "secteur": "PRIVE",
+    "organismeId": 1,
+    "latitude": 33.5731,
+    "longitude": -7.6298,
+    "description": "Ingénieure mécanique",
+    "imei": "111222333444555",
+    "deviceModel": "Samsung Galaxy S20",
+    "osVersion": "Android 11",
+    "appVersion": "1.0.0"
+  },
+  "organisme1": {
+    "nom": "EHTP - École Hassania des Travaux Publics",
+    "secteur": "PUBLIC",
+    "address": "Km 7, Route d'El Jadida, Casablanca",
+    "latitude": 33.5731,
+    "longitude": -7.6298
+  },
+  "organisme2": {
+    "nom": "ONEP - Office National de l'Eau Potable",
+    "secteur": "PUBLIC",
+    "address": "Boulevard Al Massira Al Khadra, Rabat",
+    "latitude": 34.0209,
+    "longitude": -6.8416
+  },
+  "organisme3": {
+    "nom": "TechCorp Maroc",
+    "secteur": "PRIVE",
+    "address": "Casablanca",
+    "latitude": 33.5731,
+    "longitude": -7.6298
+  }
+}
+

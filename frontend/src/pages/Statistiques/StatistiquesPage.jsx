@@ -158,11 +158,6 @@ const StatistiquesPage = () => {
                 <div className={`w-12 h-12 bg-gradient-to-br ${kpi.gradient} rounded-lg flex items-center justify-center`}>
                   <kpi.icon className="text-white" size={22} />
                 </div>
-                <span className={`text-xs font-semibold px-2 py-1 rounded ${
-                  kpi.changePositive ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'
-                }`}>
-                  {kpi.change}
-                </span>
               </div>
               <div className="text-3xl font-bold text-black mb-1">{kpi.value}</div>
               <div className="text-sm text-gray-600">{kpi.label}</div>

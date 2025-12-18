@@ -1,143 +1,83 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Users, Map, BarChart3, Settings, Home, GraduationCap, CheckCircle, XCircle, Clock, Eye, UserPlus, Shield, AlertCircle, Key, Link as LinkIcon } from 'lucide-react';
 import { ROUTES } from '../../utils/constants';
 import logoEhtp from '../../assets/styles/logo-ehtp.png';
+import { laureatApi } from '../../api/laureatApi';
+import { utilisateurApi } from '../../api/utilisateurApi';
 
 const AdministrationPage = () => {
   const [activeTab, setActiveTab] = useState('inscriptions');
   const [selectedInscription, setSelectedInscription] = useState(null);
   const [motifRejet, setMotifRejet] = useState('');
   const [showUserModal, setShowUserModal] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [newUser, setNewUser] = useState({
     nom: '',
     prenom: '',
     login: '',
     password: '',
-    role: 'Membre Bureau',
+    role: 'bureau',
     email: '',
-    idAnnuaire: ''
+    laureatId: ''
   });
 
-  const [inscriptionsEnAttente, setInscriptionsEnAttente] = useState([
-    {
-      id: 1,
-      nom: 'Amrani',
-      prenom: 'Salma',
-      email: 's.amrani@email.com',
-      telephone: '0645678901',
-      promotion: '2020',
-      filiere: 'Génie Informatique',
-      organisme: 'Capgemini',
-      secteur: 'Privé',
-      province: 'Casablanca',
-      dateInscription: '2024-11-15 14:30',
-      imei: 'IMEI-1234567890',
-      statut: 'en_attente'
-    },
-    {
-      id: 2,
-      nom: 'Alaoui',
-      prenom: 'Youssef',
-      email: 'y.alaoui@email.com',
-      telephone: '0656789012',
-      promotion: '2021',
-      filiere: 'Génie Civil',
-      organisme: 'ONEE',
-      secteur: 'Public',
-      province: 'Rabat',
-      dateInscription: '2024-11-16 09:15',
-      imei: 'IMEI-0987654321',
-      statut: 'en_attente'
-    },
-    {
-      id: 3,
-      nom: 'Ziani',
-      prenom: 'Leila',
-      email: 'l.ziani@email.com',
-      telephone: '0667890123',
-      promotion: '2022',
-      filiere: 'Génie Électrique',
-      organisme: 'Maroc Telecom',
-      secteur: 'Privé',
-      province: 'Marrakech',
-      dateInscription: '2024-11-17 16:45',
-      imei: 'IMEI-1122334455',
-      statut: 'en_attente'
+  const [inscriptionsEnAttente, setInscriptionsEnAttente] = useState([]);
+
+  const [historiqueRejets, setHistoriqueRejets] = useState([]);
+  const [utilisateurs, setUtilisateurs] = useState([]);
+
+  // Charger les données au montage du composant
+  useEffect(() => {
+    loadData();
+  }, [activeTab]);
+
+  const loadData = async () => {
+    setLoading(true);
+    try {
+      if (activeTab === 'inscriptions') {
+        const pending = await laureatApi.getPendingInscriptions();
+        setInscriptionsEnAttente(pending);
+      } else if (activeTab === 'rejets') {
+        const rejected = await laureatApi.getRejectedInscriptions();
+        // Transformer les données rejetées en format historique
+        const historique = rejected.map(r => ({
+          id: r.id,
+          nom: `${r.prenom} ${r.nom}`,
+          email: r.email,
+          dateRejet: r.dateValidation ? new Date(r.dateValidation).toLocaleDateString('fr-FR') : '',
+          motif: r.motifRejet || '',
+          administrateur: 'Admin Principal'
+        }));
+        setHistoriqueRejets(historique);
+      } else if (activeTab === 'utilisateurs') {
+        const users = await utilisateurApi.getAllUtilisateurs();
+        setUtilisateurs(users);
+      }
+    } catch (error) {
+      console.error('Erreur lors du chargement des données:', error);
+      alert('Erreur lors du chargement des données');
+    } finally {
+      setLoading(false);
     }
-  ]);
-
-  const [historiqueRejets, setHistoriqueRejets] = useState([
-    {
-      id: 1,
-      nom: 'Alaoui Hassan',
-      email: 'h.alaoui@email.com',
-      dateRejet: '2024-11-10',
-      motif: 'Informations incomplètes - Organisme non spécifié',
-      administrateur: 'Admin Principal'
-    },
-    {
-      id: 2,
-      nom: 'Benkirane Sara',
-      email: 's.benkirane@email.com',
-      dateRejet: '2024-11-08',
-      motif: 'Photo de profil non conforme',
-      administrateur: 'Admin Principal'
-    },
-    {
-      id: 3,
-      nom: 'Tahiri Karim',
-      email: 'k.tahiri@email.com',
-      dateRejet: '2024-11-05',
-      motif: 'Email non valide - domaine suspect',
-      administrateur: 'Bureau Association'
-    }
-  ]);
-
-  const [utilisateurs, setUtilisateurs] = useState([
-    {
-      id: 1,
-      nom: 'El Mansouri',
-      prenom: 'Ahmed',
-      login: 'admin.principal',
-      password: '********',
-      role: 'Administrateur',
-      email: 'a.elmansouri@ehtp.ac.ma',
-      statut: 'Actif',
-      derniereConnexion: '2024-11-20 10:30',
-      idAnnuaire: null
-    },
-    {
-      id: 2,
-      nom: 'Benani',
-      prenom: 'Fatima',
-      login: 'bureau.asso',
-      password: '********',
-      role: 'Membre Bureau',
-      email: 'f.benani@ehtp.ac.ma',
-      statut: 'Actif',
-      derniereConnexion: '2024-11-19 15:20',
-      idAnnuaire: 'LAU-2018-0245'
-    }
-  ]);
-
-  const validerInscription = (id) => {
-    const inscription = inscriptionsEnAttente.find(i => i.id === id);
-    if (!inscription) return;
-
-    setInscriptionsEnAttente(prev => prev.filter(i => i.id !== id));
-    
-    const nouveauLaureat = {
-      ...inscription,
-      statut: 'publié',
-      datePublication: new Date().toISOString(),
-      idAnnuaire: `LAU-${inscription.promotion}-${String(Math.floor(Math.random() * 9999)).padStart(4, '0')}`
-    };
-    
-    alert(`✅ Inscription validée et publiée !\n\nLauréat: ${inscription.prenom} ${inscription.nom}\nID Annuaire: ${nouveauLaureat.idAnnuaire}\n\n📧 Notification envoyée à ${inscription.email}`);
   };
 
-  const rejeterInscription = (id) => {
+  const validerInscription = async (id) => {
+    try {
+      setLoading(true);
+      await laureatApi.validateLaureat(id);
+      alert('✅ Inscription validée et publiée avec succès !');
+      // Recharger les données
+      await loadData();
+    } catch (error) {
+      console.error('Erreur lors de la validation:', error);
+      alert('Erreur lors de la validation de l\'inscription');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const rejeterInscription = async (id) => {
     if (!motifRejet.trim()) {
       alert('⚠️ Veuillez saisir un motif de rejet');
       return;
@@ -148,28 +88,23 @@ const AdministrationPage = () => {
       return;
     }
 
-    const inscription = inscriptionsEnAttente.find(i => i.id === id);
-    if (!inscription) return;
-
-    const nouveauRejet = {
-      id: historiqueRejets.length + 1,
-      nom: `${inscription.prenom} ${inscription.nom}`,
-      email: inscription.email,
-      dateRejet: new Date().toLocaleDateString('fr-FR'),
-      motif: motifRejet,
-      administrateur: 'Admin Principal'
-    };
-
-    setHistoriqueRejets(prev => [nouveauRejet, ...prev]);
-    setInscriptionsEnAttente(prev => prev.filter(i => i.id !== id));
-    
-    alert(`❌ Inscription rejetée\n\nLauréat: ${inscription.prenom} ${inscription.nom}\nMotif: ${motifRejet}\n\n📧 Email de notification envoyé à ${inscription.email}`);
-    
-    setSelectedInscription(null);
-    setMotifRejet('');
+    try {
+      setLoading(true);
+      await laureatApi.rejectLaureat(id, motifRejet);
+      alert('❌ Inscription rejetée avec succès !');
+      setSelectedInscription(null);
+      setMotifRejet('');
+      // Recharger les données
+      await loadData();
+    } catch (error) {
+      console.error('Erreur lors du rejet:', error);
+      alert('Erreur lors du rejet de l\'inscription');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const ajouterUtilisateur = () => {
+  const ajouterUtilisateur = async () => {
     if (!newUser.nom || !newUser.prenom || !newUser.login || !newUser.password || !newUser.email) {
       alert('⚠️ Tous les champs obligatoires doivent être remplis');
       return;
@@ -180,33 +115,43 @@ const AdministrationPage = () => {
       return;
     }
 
-    if (newUser.role === 'Membre Bureau' && !newUser.idAnnuaire) {
+    if (newUser.role === 'bureau' && !newUser.laureatId) {
       alert('⚠️ L\'ID Annuaire est obligatoire pour un Membre Bureau');
       return;
     }
 
-    const nouvelUtilisateur = {
-      id: utilisateurs.length + 1,
-      ...newUser,
-      password: '********',
-      statut: 'Actif',
-      derniereConnexion: 'Jamais connecté',
-      idAnnuaire: newUser.role === 'Membre Bureau' ? newUser.idAnnuaire : null
-    };
-
-    setUtilisateurs(prev => [...prev, nouvelUtilisateur]);
-    setShowUserModal(false);
-    setNewUser({
-      nom: '',
-      prenom: '',
-      login: '',
-      password: '',
-      role: 'Membre Bureau',
-      email: '',
-      idAnnuaire: ''
-    });
-
-    alert(`✅ Utilisateur créé avec succès !\n\nLogin: ${newUser.login}\nRôle: ${newUser.role}${newUser.idAnnuaire ? `\nID Annuaire: ${newUser.idAnnuaire}` : ''}`);
+    try {
+      setLoading(true);
+      const userData = {
+        nom: newUser.nom,
+        prenom: newUser.prenom,
+        login: newUser.login,
+        password: newUser.password,
+        email: newUser.email,
+        role: newUser.role === 'Administrateur' ? 'admin' : newUser.role,
+        laureatId: newUser.laureatId || null
+      };
+      
+      await utilisateurApi.createUtilisateur(userData);
+      alert('✅ Utilisateur créé avec succès !');
+      setShowUserModal(false);
+      setNewUser({
+        nom: '',
+        prenom: '',
+        login: '',
+        password: '',
+        role: 'bureau',
+        email: '',
+        laureatId: ''
+      });
+      // Recharger les données
+      await loadData();
+    } catch (error) {
+      console.error('Erreur lors de la création:', error);
+      alert('Erreur lors de la création de l\'utilisateur');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -359,7 +304,7 @@ const AdministrationPage = () => {
                                 Formation
                               </div>
                               <div className="text-sm font-semibold text-black">
-                                {inscription.filiere}
+                                {inscription.filiereLibelle || inscription.filiere}
                               </div>
                               <div className="text-sm text-primary font-bold">
                                 Promo {inscription.promotion}
@@ -371,10 +316,10 @@ const AdministrationPage = () => {
                                 Professionnel
                               </div>
                               <div className="text-sm font-semibold text-black">
-                                {inscription.organisme}
+                                {inscription.organismeNom || 'Non spécifié'}
                               </div>
                               <div className="text-xs text-gray-600">{inscription.secteur}</div>
-                              <div className="text-xs text-gray-600">{inscription.province}</div>
+                              <div className="text-xs text-gray-600">{inscription.provinceNom || 'Non spécifié'}</div>
                             </div>
 
                             <div>
@@ -382,10 +327,7 @@ const AdministrationPage = () => {
                                 Technique
                               </div>
                               <div className="text-xs text-gray-600">
-                                Date: {inscription.dateInscription}
-                              </div>
-                              <div className="text-xs text-gray-600">
-                                Device: {inscription.imei}
+                                Date: {inscription.dateInscription ? new Date(inscription.dateInscription).toLocaleString('fr-FR') : 'N/A'}
                               </div>
                             </div>
                           </div>
@@ -485,9 +427,10 @@ const AdministrationPage = () => {
                         </button>
                         <button
                           onClick={() => rejeterInscription(selectedInscription.id)}
-                          className="flex-1 px-6 py-3 bg-red-600 text-white rounded-xl font-semibold hover:bg-red-700 transition-all"
+                          disabled={loading}
+                          className="flex-1 px-6 py-3 bg-red-600 text-white rounded-xl font-semibold hover:bg-red-700 transition-all disabled:opacity-50"
                         >
-                          Confirmer le Rejet
+                          {loading ? 'Traitement...' : 'Confirmer le Rejet'}
                         </button>
                       </div>
                     </div>

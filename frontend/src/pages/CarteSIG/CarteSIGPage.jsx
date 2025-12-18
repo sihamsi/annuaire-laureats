@@ -137,6 +137,7 @@ const CarteSIGPage = () => {
   
   const [showProvinces, setShowProvinces] = useState(true);
   const [showMarkers, setShowMarkers] = useState(true);
+  const [baseMap, setBaseMap] = useState('streets'); // 'streets', 'satellite', 'topographic'
   
   // Filtres identiques à AnnuairePage
   const [filters, setFilters] = useState({
@@ -221,8 +222,23 @@ const CarteSIGPage = () => {
     });
   };
 
-  // Initialisation de Leaflet
+  // Configuration des couches Esri
+  const getEsriBaseMap = (type) => {
+    const L = window.L;
+    switch (type) {
+      case 'satellite':
+        return L.esri.basemapLayer('Imagery');
+      case 'topographic':
+        return L.esri.basemapLayer('Topographic');
+      case 'streets':
+      default:
+        return L.esri.basemapLayer('Streets');
+    }
+  };
+
+  // Initialisation de Leaflet avec Esri
   useEffect(() => {
+    const loadLeafletAndEsri = () => {
     if (!window.L) {
       const leafletCSS = document.createElement('link');
       leafletCSS.rel = 'stylesheet';
@@ -232,16 +248,35 @@ const CarteSIGPage = () => {
       const leafletJS = document.createElement('script');
       leafletJS.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
       leafletJS.onload = () => {
+          // Charger Esri Leaflet après Leaflet
+          const esriJS = document.createElement('script');
+          esriJS.src = 'https://unpkg.com/esri-leaflet@3.0.12/dist/esri-leaflet.js';
+          esriJS.onload = () => {
         if (mapRef.current && !leafletMapRef.current) {
           initializeMap();
         }
+          };
+          document.body.appendChild(esriJS);
       };
       document.body.appendChild(leafletJS);
+      } else if (!window.L.esri) {
+        // Leaflet est chargé mais pas Esri
+        const esriJS = document.createElement('script');
+        esriJS.src = 'https://unpkg.com/esri-leaflet@3.0.12/dist/esri-leaflet.js';
+        esriJS.onload = () => {
+          if (mapRef.current && !leafletMapRef.current) {
+            initializeMap();
+          }
+        };
+        document.body.appendChild(esriJS);
     } else {
       if (mapRef.current && !leafletMapRef.current) {
         initializeMap();
       }
     }
+    };
+
+    loadLeafletAndEsri();
 
     return () => {
       if (leafletMapRef.current) {
@@ -251,6 +286,14 @@ const CarteSIGPage = () => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Mise à jour des couches de base
+  useEffect(() => {
+    if (leafletMapRef.current && window.L && window.L.esri) {
+      updateBaseMap();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [baseMap]);
 
   // Mise à jour des couches
   useEffect(() => {
@@ -273,10 +316,10 @@ const CarteSIGPage = () => {
 
     leafletMapRef.current = map;
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap contributors',
-      maxZoom: 18
-    }).addTo(map);
+    // Ajouter la couche Esri de base
+    const baseLayer = getEsriBaseMap(baseMap);
+    baseLayer.addTo(map);
+    map.baseLayer = baseLayer;
 
     addGeoServerLayers(map, L);
     updateMarkers();
@@ -284,6 +327,36 @@ const CarteSIGPage = () => {
     L.control.zoom({
       position: 'topright'
     }).addTo(map);
+
+    // Ajouter le contrôle des couches de base
+    const baseMaps = {
+      "Plan": getEsriBaseMap('streets'),
+      "Satellite": getEsriBaseMap('satellite'),
+      "Topographique": getEsriBaseMap('topographic')
+    };
+
+    L.control.layers(baseMaps, null, {
+      position: 'topright'
+    }).addTo(map);
+  };
+
+  const updateBaseMap = () => {
+    const map = leafletMapRef.current;
+    if (!map || !window.L || !window.L.esri) return;
+
+    if (map.baseLayer) {
+      map.removeLayer(map.baseLayer);
+    }
+
+    const newBaseLayer = getEsriBaseMap(baseMap);
+    newBaseLayer.addTo(map);
+    map.baseLayer = newBaseLayer;
+
+    // Réajouter les autres couches
+    if (showProvinces && map.provincesLayer) {
+      map.addLayer(map.provincesLayer);
+    }
+    updateMarkers();
   };
 
   const addGeoServerLayers = (map, L) => {
@@ -427,6 +500,10 @@ const CarteSIGPage = () => {
     }
   };
 
+  const changeBaseMap = (mapType) => {
+    setBaseMap(mapType);
+  };
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -466,17 +543,17 @@ const CarteSIGPage = () => {
       </header>
 
       {/* Contenu Principal */}
-      <div className="max-w-7xl mx-auto px-6 py-8 pt-24">
+      <div className="max-w-7xl mx-auto px-6 py-8 pt-24 flex flex-col" style={{minHeight: 'calc(100vh - 200px)'}}>
         <div className="mb-6">
           <h1 className="text-4xl font-serif text-black mb-2">
             Carte SIG
           </h1>
-          <p className="text-gray-600 text-lg">Visualisation géographique interactive</p>
+          <p className="text-gray-600 text-lg">Visualisation géographique interactive avec Esri</p>
         </div>
         
-        <div className="grid grid-cols-4 gap-6">
+        <div className="grid grid-cols-4 gap-6 items-stretch flex-1">
           {/* Panneau latéral gauche */}
-          <div className="space-y-6">
+          <div className="flex flex-col space-y-6 h-full">
             {/* Filtres de carte */}
             <div className="bg-white rounded-2xl shadow-xl p-5 border border-gray-200">
               <h3 className="font-bold text-black mb-4 flex items-center text-lg">
@@ -557,10 +634,50 @@ const CarteSIGPage = () => {
               </button>
             </div>
 
-            {/* Légende */}
+            {/* Contrôles de carte */}
             <div className="bg-white rounded-2xl shadow-xl p-5 border border-gray-200">
               <h3 className="font-bold text-black mb-4 flex items-center text-lg">
                 <Layers className="mr-2 text-primary" size={22} />
+                Fond de carte
+              </h3>
+              <div className="space-y-3">
+                <button
+                  onClick={() => changeBaseMap('streets')}
+                  className={`w-full px-4 py-3 rounded-lg font-medium transition-all ${
+                    baseMap === 'streets' 
+                      ? 'bg-primary text-white shadow-lg' 
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  🗺️ Plan
+                </button>
+                <button
+                  onClick={() => changeBaseMap('satellite')}
+                  className={`w-full px-4 py-3 rounded-lg font-medium transition-all ${
+                    baseMap === 'satellite' 
+                      ? 'bg-primary text-white shadow-lg' 
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  🛰️ Satellite
+                </button>
+                <button
+                  onClick={() => changeBaseMap('topographic')}
+                  className={`w-full px-4 py-3 rounded-lg font-medium transition-all ${
+                    baseMap === 'topographic' 
+                      ? 'bg-primary text-white shadow-lg' 
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  🏔️ Topographique
+                </button>
+              </div>
+            </div>
+
+            {/* Légende */}
+            <div className="bg-white rounded-2xl shadow-xl p-5 border border-gray-200 flex-1">
+              <h3 className="font-bold text-black mb-4 flex items-center text-lg">
+                <MapPin className="mr-2 text-primary" size={22} />
                 Légende
               </h3>
               <div className="space-y-3">
@@ -587,12 +704,12 @@ const CarteSIGPage = () => {
           </div>
 
           {/* Carte principale */}
-          <div className="col-span-3">
-            <div className="bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-200" style={{height: '800px'}}>
+          <div className="col-span-3 flex h-full">
+            <div className="bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-200 flex flex-col w-full h-full relative sticky top-24" style={{ height: 'calc(100vh - 120px)' }}>
               {/* Barre d'outils carte */}
-              <div className="bg-primary px-6 py-4 flex justify-between items-center">
+              <div className="bg-primary px-6 py-4 flex justify-between items-center flex-shrink-0 rounded-t-2xl">
                 <div className="text-white">
-                  <div className="font-bold text-lg">Carte Interactive du Maroc</div>
+                  <div className="font-bold text-lg">Carte Interactive du Maroc - Esri</div>
                   <div className="text-sm opacity-90">Cliquez sur un marqueur pour plus d'informations</div>
                 </div>
                 <div className="flex space-x-2">
@@ -612,7 +729,8 @@ const CarteSIGPage = () => {
               {/* Zone carte Leaflet */}
               <div 
                 ref={mapRef} 
-                style={{ width: '100%', height: 'calc(100% - 72px)' }}
+                className="flex-1 relative"
+                style={{ width: '100%' }}
               ></div>
             </div>
           </div>
