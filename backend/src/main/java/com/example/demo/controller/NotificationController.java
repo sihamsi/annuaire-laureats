@@ -46,5 +46,6 @@ public class NotificationController {
             return ResponseEntity.ok(notificationService.getByLaureat(laureatId));
         }
         return ResponseEntity.ok(notificationService.getAll());
+        
     }
 }
