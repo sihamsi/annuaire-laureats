@@ -2,8 +2,7 @@ package com.example.demo.repository;
 
 import com.example.demo.entity.Laureat;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-@Repository
-public interface LaureatRepository extends JpaRepository<Laureat, Long> {
+public interface LaureatRepository extends JpaRepository<Laureat, Long>, JpaSpecificationExecutor<Laureat> {
 }
