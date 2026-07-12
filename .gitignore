@@ -100,3 +100,13 @@ backend/src/main/resources/application-secret*.properties
 backend/src/main/resources/application-secret*.yml
 *.db
 *.sqlite
+
+# =========================
+# === Mobile (Expo / React Native) ===
+# =========================
+frontend_mobile/node_modules/
+frontend_mobile/.expo/
+frontend_mobile/android/
+frontend_mobile/ios/
+*.keystore
+*.jks
