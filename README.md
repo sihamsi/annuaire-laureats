@@ -30,7 +30,7 @@
 ## 🧱 Architecture
 
 ```
-projet_geoinfo/
+annuaire-laureats/
 ├── backend/            # REST API — Spring Boot · JPA · PostgreSQL
 │   ├── src/main/java/  #   entities (Laureat, Province, Geolocalisation…),
 │   │                   #   controllers (auth, laureats, geoloc, stats, notifications…)
