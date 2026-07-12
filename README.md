@@ -1,46 +1,41 @@
 <div align="center">
 
-# 🌍 Projet GéoInfo
+# 🎓 Annuaire des Lauréats — GéoInfo
 
-**Full-stack geoinformation platform — WebSIG**
+**Cross-platform alumni directory with GIS features — Web · Mobile · REST API**
 
-[![Java](https://img.shields.io/badge/Java-Spring%20Boot%203-6DB33F?logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
-[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)](https://react.dev)
-[![Maven](https://img.shields.io/badge/Maven-wrapper-C71A36?logo=apachemaven&logoColor=white)](https://maven.apache.org)
-[![Status](https://img.shields.io/badge/status-work%20in%20progress-orange)]()
+[![Java](https://img.shields.io/badge/Java-Spring%20Boot-6DB33F?logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
+[![React](https://img.shields.io/badge/React-web-61DAFB?logo=react&logoColor=black)](https://react.dev)
+[![React Native](https://img.shields.io/badge/React%20Native-Expo-000020?logo=expo&logoColor=white)](https://expo.dev)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-spatial%20data-4169E1?logo=postgresql&logoColor=white)](https://www.postgresql.org)
 
-*Visualize, manage and analyze geospatial data through a modern web interface backed by a REST API.*
+*Find, locate and connect alumni — searchable directory, interactive SIG map of graduates by province, statistics dashboard and full admin workflow.*
 
 </div>
 
 ---
 
-## 🎯 About
+## ✨ Features
 
-**Projet GéoInfo** is a web-based GIS (WebSIG) under active development: a Spring Boot REST API serving geospatial data to an interactive React map client. The goal is a clean, end-to-end example of a modern geoinformation stack — from spatial storage to map rendering.
-
-## 🗺️ Roadmap
-
-- [x] Monorepo skeleton — Spring Boot backend + React frontend
-- [ ] Interactive map view (base layers, zoom/pan, layer switcher)
-- [ ] Geospatial entities CRUD via REST API (GeoJSON)
-- [ ] Spatial database integration (PostgreSQL + PostGIS)
-- [ ] Drawing & editing geometries on the map
-- [ ] Authentication and user roles
-- [ ] Thematic styling and filters by attribute
-- [ ] Dashboard with spatial statistics
+- 🔎 **Alumni directory** — searchable, filterable profiles (promotion, filière, secteur, organisme, province…)
+- 🗺️ **SIG map** — graduates geolocated by province on an interactive map (province geometries imported from **QGIS** into PostgreSQL)
+- 📊 **Statistics dashboard** — distribution by filière, sector, gender, promotion and geography
+- 👤 **Self-service accounts** — alumni sign up, manage their profile and photo; inscriptions are validated by an admin (with rejection motives)
+- 🛡️ **Admin back-office** — account validation, directory management, contact messages, notifications
+- 🔐 **Authentication** — BCrypt-hashed passwords, role-based access (admin / lauréat / visitor)
+- 📱 **Mobile app** — React Native (Expo) client with the same directory, profile and map features
 
 ## 🧱 Architecture
 
 ```
 projet_geoinfo/
-├── backend/                  # REST API — Java · Spring Boot · Maven
-│   └── src/main/java/...     # controllers, services, repositories (WIP)
-│
-└── frontend/                 # Web client — React 19 (CRA)
-    └── src/                  # map components, API client (WIP)
-
-        React (map UI)  ──HTTP/GeoJSON──▶  Spring Boot API  ──▶  PostgreSQL/PostGIS (planned)
+├── backend/            # REST API — Spring Boot · JPA · PostgreSQL
+│   ├── src/main/java/  #   entities (Laureat, Province, Geolocalisation…),
+│   │                   #   controllers (auth, laureats, geoloc, stats, notifications…)
+│   └── scripts/        #   QGIS → PostgreSQL province import (SQL)
+├── frontend/           # Web client — React (annuaire, carte SIG, stats, admin)
+├── frontend_mobile/    # Mobile client — React Native / Expo
+└── scripts/            # Dev utilities (network/firewall helpers)
 ```
 
 ## 🚀 Getting started
@@ -51,35 +46,36 @@ projet_geoinfo/
 |---|---|
 | Java (JDK) | 17+ |
 | Node.js | 18+ |
-| Maven | provided via `mvnw` wrapper |
+| PostgreSQL | 14+ (database `laureat_db`) |
 
-### Run the backend
+### Backend
 
 ```bash
 cd backend
-./mvnw spring-boot:run        # Windows: mvnw.cmd spring-boot:run
+./mvnw spring-boot:run          # Windows: mvnw.cmd spring-boot:run  (or ..\DEMARRER_BACKEND.ps1)
 ```
 
-API available on `http://localhost:8080`.
+API on `http://localhost:8080`. On first run a demo admin is seeded — see console output.
 
-### Run the frontend
+### Web frontend
 
 ```bash
 cd frontend
-npm install
-npm start
+cp .env.example .env            # points to http://localhost:8080
+npm install && npm start
 ```
 
-UI available on `http://localhost:3000`.
+### Mobile (Expo)
 
-## 🔐 Configuration & secrets
+```bash
+cd frontend_mobile
+npm install
+npx expo start
+```
 
-Environment-specific values (database credentials, API keys) must **never** be committed:
+## 🔐 Demo credentials & scope
 
-- backend → use environment variables or an ignored `application-local.properties`
-- frontend → use an ignored `.env` (commit only a template `.env.example`)
-
-The repository's `.gitignore` already enforces these rules.
+This is an academic project: a demo admin account (`admin` / see `CreateAdminOnce`) is auto-seeded for evaluation, and the database configuration targets localhost. For any real deployment, move credentials to environment variables and disable the demo seed. No real personal data is stored in this repository.
 
 ## 👩‍💻 Author
 
