@@ -1,70 +1,145 @@
-# Getting Started with Create React App
+# Annuaire des Lauréats EHTP
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Plateforme de gestion de l'annuaire des lauréats de l'École Hassania des Travaux Publics (EHTP).
 
-## Available Scripts
+## 🚀 Technologies utilisées
 
-In the project directory, you can run:
+- **React** 19.2.0
+- **React Router DOM** 6.20.0
+- **Axios** 1.6.0
+- **Lucide React** 0.294.0 (icônes)
+- **CSS Modules** (pour le styling)
 
-### `npm start`
+## 📁 Structure du projet
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+```
+frontend/
+├── public/
+│   ├── index.html
+│   └── assets/
+│       └── images/
+│           └── logo-ehtp.png
+│
+├── src/
+│   ├── api/
+│   │   └── axiosConfig.js          # Configuration Axios
+│   │
+│   ├── assets/
+│   │   └── styles/
+│   │       ├── variables.css       # Variables CSS
+│   │       └── global.css          # Styles globaux
+│   │
+│   ├── components/
+│   │   └── common/
+│   │       ├── Navbar/             # Barre de navigation
+│   │       ├── Footer/             # Pied de page
+│   │       ├── Button/            # Composant bouton
+│   │       ├── Input/             # Composant input
+│   │       └── Card/              # Composant carte
+│   │
+│   ├── layouts/
+│   │   └── MainLayout.jsx         # Layout principal
+│   │
+│   ├── pages/
+│   │   ├── Home/                   # Page d'accueil
+│   │   ├── Rechercher/             # Page de recherche
+│   │   ├── APropos/                # Page à propos
+│   │   └── Contact/                # Page de contact
+│   │
+│   ├── routes/
+│   │   └── AppRoutes.jsx          # Configuration des routes
+│   │
+│   ├── utils/
+│   │   └── constants.js           # Constantes de l'application
+│   │
+│   ├── App.jsx
+│   └── index.js
+│
+├── .env
+├── .env.example
+├── jsconfig.json
+└── package.json
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 🎨 Design
 
-### `npm test`
+- **Couleur principale** : #6B7F5C (vert olive)
+- **Background** : #F5F5F0 (beige clair)
+- **Typographie titres** : Georgia (serif)
+- **Typographie corps** : Sans-serif
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 📦 Installation
 
-### `npm run build`
+1. Installer les dépendances :
+```bash
+npm install
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+2. Configurer les variables d'environnement :
+```bash
+cp .env.example .env
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+3. Modifier le fichier `.env` avec vos configurations :
+```
+REACT_APP_API_URL=http://localhost:8080/api
+REACT_APP_ENV=development
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 🏃 Démarrage
 
-### `npm run eject`
+```bash
+npm start
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+L'application sera accessible sur [http://localhost:3000](http://localhost:3000)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## 🛠️ Scripts disponibles
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- `npm start` : Démarre le serveur de développement
+- `npm build` : Construit l'application pour la production
+- `npm test` : Lance les tests
+- `npm eject` : Éjecte la configuration (irréversible)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## 📝 Fonctionnalités
 
-## Learn More
+- ✅ Page d'accueil avec présentation de l'EHTP
+- ✅ Recherche de lauréats avec filtres avancés
+- ✅ Page à propos avec informations sur l'école
+- ✅ Formulaire de contact
+- ✅ Navigation responsive
+- ✅ Design moderne et professionnel
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## 🔗 Routes
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- `/` : Page d'accueil
+- `/rechercher` : Page de recherche
+- `/a-propos` : Page à propos
+- `/contact` : Page de contact
 
-### Code Splitting
+## 📱 Responsive
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+L'application est entièrement responsive et s'adapte à tous les écrans (mobile, tablette, desktop).
 
-### Analyzing the Bundle Size
+## 🔧 Configuration
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### Imports absolus
 
-### Making a Progressive Web App
+Le projet utilise des imports absolus configurés dans `jsconfig.json` :
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+```javascript
+import Button from '@components/common/Button/Button';
+import { ROUTES } from '@utils/constants';
+```
 
-### Advanced Configuration
+### CSS Modules
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Tous les composants utilisent CSS Modules pour le styling :
 
-### Deployment
+```javascript
+import styles from './Component.module.css';
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## 📄 Licence
 
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Ce projet est développé pour l'École Hassania des Travaux Publics.
