@@ -1,8 +1,10 @@
 <div align="center">
 
-# 🎓 Annuaire des Lauréats — GéoInfo
+# 🎓 EHTP Alumni Hub
 
-**Cross-platform alumni directory with GIS features — Web · Mobile · REST API**
+### *L'annuaire des lauréats, cartographié.*
+
+**One platform to find, locate and connect graduates — Web app · Mobile app · REST API · SIG map**
 
 [![Java](https://img.shields.io/badge/Java-Spring%20Boot-6DB33F?logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
 [![React](https://img.shields.io/badge/React-web-61DAFB?logo=react&logoColor=black)](https://react.dev)
