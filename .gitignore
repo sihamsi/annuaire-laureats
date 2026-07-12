@@ -86,3 +86,17 @@ out/
 # =========================
 .DS_Store
 Thumbs.db
+
+# =========================
+# === Secrets (never commit) ===
+# =========================
+.env
+.env.*
+!.env.example
+frontend/.env
+backend/src/main/resources/application-local.properties
+backend/src/main/resources/application-local.yml
+backend/src/main/resources/application-secret*.properties
+backend/src/main/resources/application-secret*.yml
+*.db
+*.sqlite
