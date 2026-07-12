@@ -83,4 +83,4 @@ This is an academic project: a demo admin account (`admin` / see `CreateAdminOnc
 
 **[Siham Ait Oumghar](https://github.com/sihamsi)** — Software engineer · GIS & full-stack development
 
-*See also: [SIG Construction](https://github.com/sihamsi/Flutter_Project) (Flutter offline GIS app) · [Multitenant Cartography & Billing](https://github.com/sihamsi/multitenant-cartography-billing) (Spring Boot + React platform)*
+*See also: [SIG Construction](https://github.com/sihamsi/sig-construction) (Flutter offline GIS app) · [Multitenant Cartography & Billing](https://github.com/sihamsi/multitenant-cartography-billing) (Spring Boot + React platform)*
